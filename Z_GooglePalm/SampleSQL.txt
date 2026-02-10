@@ -1,0 +1,56 @@
+-- Create the database
+CREATE DATABASE atliq_tshirts;
+USE atliq_tshirts;
+
+-- Create the t_shirts table
+CREATE TABLE t_shirts (
+    t_shirt_id INT AUTO_INCREMENT PRIMARY KEY,
+    brand ENUM('Van Huesen', 'Levi', 'Nike', 'Adidas') NOT NULL,
+    color ENUM('Red', 'Blue', 'Black', 'White') NOT NULL,
+    size ENUM('XS', 'S', 'M', 'L', 'XL') NOT NULL,
+    price INT CHECK (price BETWEEN 10 AND 50),
+    stock_quantity INT NOT NULL,
+    UNIQUE KEY brand_color_size (brand, color, size)
+);
+
+-- Create the discounts table
+CREATE TABLE discounts (
+    discount_id INT AUTO_INCREMENT PRIMARY KEY,
+    t_shirt_id INT NOT NULL,
+    pct_discount DECIMAL(5,2) CHECK (pct_discount BETWEEN 0 AND 100),
+    FOREIGN KEY (t_shirt_id) REFERENCES t_shirts(t_shirt_id)
+);
+
+INSERT INTO t_shirts (brand, color, size, price, stock_quantity)
+VALUES
+('Van Huesen','Red','M',25,100),
+('Van Huesen','Blue','L',30,80),
+('Levi','Black','S',20,120),
+('Levi','White','M',22,90),
+('Nike','Red','XL',35,60),
+('Nike','Blue','M',28,110),
+('Adidas','Black','L',26,75),
+('Adidas','White','S',24,95);
+
+INSERT INTO discounts (t_shirt_id, pct_discount)
+VALUES
+(1,10.00),
+(2,15.00),
+(3,5.00),
+(5,20.00),
+(7,12.50);
+
+SELECT * FROM t_shirts;
+SELECT * FROM discounts;
+
+-- Join to see final price after discount
+SELECT 
+    t.brand,
+    t.color,
+    t.size,
+    t.price,
+    d.pct_discount,
+    (t.price - (t.price * IFNULL(d.pct_discount,0)/100)) AS final_price
+FROM t_shirts t
+LEFT JOIN discounts d 
+ON t.t_shirt_id = d.t_shirt_id;
