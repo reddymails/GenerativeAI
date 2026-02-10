@@ -6,7 +6,7 @@ Using the above examples you can learn
 - Calling OpenAI LLM
 - Using LangChain
 - Using LangGraph
-- Vecotrdatabase using FASSI
+- Vector database using FASSI.
 - RAG model examples
 - Creating agents by calling google fligh api
 - I created another example to pull Kids menu from school website and SMS me daily at 7.00 am. For this i Used Twilio SMS aPI
